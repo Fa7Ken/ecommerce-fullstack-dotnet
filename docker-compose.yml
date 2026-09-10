@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Configuracao do banco de dados relacional PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce_postgres
+    restart: always
+    environment:
+      # Variaveis de ambiente para criar usuario, senha e banco inicial
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: ecommerce_db
+    ports:
+      # Mapeamento de porta (porta_da_maquina:porta_do_conteiner)
+      - "5432:5432"
+    volumes:
+      # Persistencia de dados para nao perder informacoes quando o conteiner parar
+      - postgres_data:/var/lib/postgresql/data
+
+  # Configuracao do banco em memoria Redis para cache
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+# Declaracao dos volumes nomeados
+volumes:
+  postgres_data:
